@@ -1,0 +1,19 @@
+{% extends 'modelo.html' %}
+
+{% block title %} Cadastrar Livros Favoritos {% endblock %}
+
+{% block conteudo %}
+
+<div class="page">
+    <form method="POST" class="formLogin" method="post" action="{{url_for('favoritos')}}">
+        <h1>Login</h1>
+        <p>Insira os dados para favoritar o livro</p>
+        <label for="livro">Nome do livro</label>
+        <input type="text" name="livro" placeholder="Digite o nome do livro" autofocus="true" />
+        <label for="escritor">Escritor</label>
+        <input type="text" name="escritor" placeholder="Digite o nome do escritor" />
+        <button class="btn btn-primary btn-xl rounded-pill mt-5">Enviar</button>
+    </form>
+</div>
+
+{% endblock %}
