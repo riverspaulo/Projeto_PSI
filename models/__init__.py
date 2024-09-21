@@ -23,6 +23,10 @@ class User(UserMixin):
             self._titulo = kwargs['titulo']
         if 'autor' in kwargs.keys():
             self._autor = kwargs['autor']
+        if 'livro' in kwargs.keys():
+            self._livro = kwargs['livro']
+        if 'escritor' in kwargs.keys():
+            self._escritor = kwargs['escritor']
 
     # 5 - sobresrever get id do UserMixin
     def get_id(self):
@@ -65,6 +69,21 @@ class User(UserMixin):
         conn.close()
         return recomendacoes
     
+     
+    def save_favoritos(self):        
+        conn = obter_conexao()  
+        cursor = conn.cursor()      
+        cursor.execute("INSERT INTO favoritos(livro, escritor) VALUES (?,?)", (self._livro, self._escritor))
+        conn.commit()
+        conn.close()
+        return True
+    
+    def all_favoritos(cls):
+        conn = obter_conexao()
+        favoritos = conn.execute("SELECT livro, escritor FROM favoritos").fetchall()
+        conn.close()
+        return favoritos
+    
     @classmethod
     def get(cls,user_id):
         conn = obter_conexao()
@@ -95,3 +114,4 @@ class User(UserMixin):
         conn.close()
         return user
     
+
