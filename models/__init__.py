@@ -19,6 +19,10 @@ class User(UserMixin):
             self._senha = kwargs['senha']
         if 'hash' in kwargs.keys():
             self._hash = kwargs['hash']
+        if 'titulo' in kwargs.keys():
+            self._titulo = kwargs['titulo']
+        if 'autor' in kwargs.keys():
+            self._autor = kwargs['autor']
 
     # 5 - sobresrever get id do UserMixin
     def get_id(self):
@@ -46,6 +50,20 @@ class User(UserMixin):
         conn.commit()
         conn.close()
         return True
+    
+    def save_recomendacoes(self):        
+        conn = obter_conexao()  
+        cursor = conn.cursor()      
+        cursor.execute("INSERT INTO recomendacoes(titulo, autor) VALUES (?,?)", (self._titulo, self._autor))
+        conn.commit()
+        conn.close()
+        return True
+    
+    def all_recomendacoes(cls):
+        conn = obter_conexao()
+        recomendacoes = conn.execute("SELECT titulo, autor FROM recomendacoes").fetchall()
+        conn.close()
+        return recomendacoes
     
     @classmethod
     def get(cls,user_id):
@@ -76,3 +94,4 @@ class User(UserMixin):
         user = conn.execute("SELECT id, email, senha FROM users WHERE email = ?", (email,)).fetchone()
         conn.close()
         return user
+    
