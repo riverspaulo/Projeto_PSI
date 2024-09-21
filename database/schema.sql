@@ -15,6 +15,6 @@ CREATE TABLE IF NOT EXISTS recomendacoes (
 
 CREATE TABLE IF NOT EXISTS favoritos (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    titulo TEXT NOT NULL,
-    email TEXT NOT NULL
+    livro TEXT NOT NULL,
+    escritor TEXT NOT NULL
 );
