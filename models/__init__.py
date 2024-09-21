@@ -1,13 +1,16 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-import sqlite3
+import mysql.connector
 
-database = 'database.db'
 
 def obter_conexao():
-    conn = sqlite3.connect(database)
-    conn.row_factory = sqlite3.Row
-    return conn
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="db_livros"
+    )   
+
 
 class User(UserMixin):
     _hash : str
@@ -47,8 +50,8 @@ class User(UserMixin):
     # ----------métodos para manipular o banco--------------#
     def save(self):        
         conn = obter_conexao()  
-        cursor = conn.cursor()      
-        cursor.execute("INSERT INTO users(email, senha) VALUES (?,?)", (self._email, self._hash))
+        cursor = conn.cursor(dictionary=True)      
+        cursor.execute("INSERT INTO users(email, senha) VALUES (%s, %s)", (self._email, self._hash,))
         # salva o id no objeto recem salvo no banco
         self._id = cursor.lastrowid
         conn.commit()
@@ -57,37 +60,46 @@ class User(UserMixin):
     
     def save_recomendacoes(self):        
         conn = obter_conexao()  
-        cursor = conn.cursor()      
-        cursor.execute("INSERT INTO recomendacoes(titulo, autor) VALUES (?,?)", (self._titulo, self._autor))
+        cursor = conn.cursor(dictionary=True)      
+        cursor.execute("INSERT INTO recomendacoes(titulo, autor) VALUES (%s, %s)", (self._titulo, self._autor,))
         conn.commit()
         conn.close()
         return True
     
     def all_recomendacoes(cls):
         conn = obter_conexao()
-        recomendacoes = conn.execute("SELECT titulo, autor FROM recomendacoes").fetchall()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT titulo, autor FROM recomendacoes")
+        recomendacoes = cursor.fetchall()
+        conn.commit()
         conn.close()
         return recomendacoes
     
      
     def save_favoritos(self):        
         conn = obter_conexao()  
-        cursor = conn.cursor()      
-        cursor.execute("INSERT INTO favoritos(livro, escritor) VALUES (?,?)", (self._livro, self._escritor))
+        cursor = conn.cursor(dictionary=True)      
+        cursor.execute("INSERT INTO favoritos(livro, escritor) VALUES (%s, %s)", (self._livro, self._escritor,))
         conn.commit()
         conn.close()
         return True
     
     def all_favoritos(cls):
         conn = obter_conexao()
-        favoritos = conn.execute("SELECT livro, escritor FROM favoritos").fetchall()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT livro, escritor FROM favoritos")
+        favoritos = cursor.fetchall()
+        conn.commit()
         conn.close()
         return favoritos
     
     @classmethod
     def get(cls,user_id):
         conn = obter_conexao()
-        user = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+        user = cursor.fetchone()
+        conn.commit()
         conn.close()
         if user:
             loaduser = User(email=user['email'] , hash=user['senha'])
@@ -99,7 +111,10 @@ class User(UserMixin):
     @classmethod
     def exists(cls, email):
         conn = obter_conexao()
-        user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        user = cursor.fetchall()
+        conn.commit()
         conn.close()
         if user: #melhorar esse if-else
             return True
@@ -107,11 +122,14 @@ class User(UserMixin):
             return False
     
     
+    
     @classmethod
     def get_by_email(cls,email):
         conn = obter_conexao()
-        user = conn.execute("SELECT id, email, senha FROM users WHERE email = ?", (email,)).fetchone()
+        cursor = conn.cursor(dictionary=True) 
+        cursor.execute("SELECT id, email, senha FROM users WHERE email = %s", (email,))
+        user = cursor.fetchone() 
+        conn.commit()
         conn.close()
-        return user
     
-
+        return user
