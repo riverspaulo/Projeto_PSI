@@ -55,12 +55,21 @@ def login():
             return redirect(url_for('login'))
     return render_template('pages/login.html')
              
-@app.route('/recomendação')
+@app.route('/recomendação', methods=['POST', 'GET'])
 def recomend():
+    if request.method == 'POST':
+        titulo = request.form['titulo']
+        autor = request.form['autor']
+        recomendacao = User(titulo=titulo, autor=autor)
+        recomendacao.save_recomendacoes()
+        flash("Recomendação enviada com sucesso")
+        return redirect(url_for('rec_usuarios'))  
     return render_template('pages/recomend.html')
 
+@app.route('/recomendações_usuarios')
+def rec_usuarios():
+    return render_template('pages/rec_usuarios.html', recomendacoes = User.all_recomendacoes(User))
 
-# 5 - bloquear uma rota
 @app.route('/dashboard')
 @login_required
 def dash():
