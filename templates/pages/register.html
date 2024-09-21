@@ -5,14 +5,14 @@
 {% block conteudo %}
 
 <div class="page">
-    <form method="POST" class="formLogin" method="post">
+    <form method="POST" class="formLogin" method="post" action="{{url_for('register')}}">
         <h1>Cadastro</h1>
         <p>Digite os seus dados no campo abaixo para se cadastrar.</p>
         <label for="email">E-mail</label>
         <input type="email" name="email" placeholder="Digite seu e-mail" autofocus="true" />
         <label for="password">Senha</label>
         <input type="password" name="senha" placeholder="Crie uma senha" />
-        <a class="btn btn-primary btn-xl rounded-pill mt-5" href="{{url_for('login')}}">cadastrar</a>
+        <button class="btn btn-primary btn-xl rounded-pill mt-5">cadastrar</button>
     </form>
 </div>
 
