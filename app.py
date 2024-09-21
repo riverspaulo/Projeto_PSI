@@ -70,10 +70,21 @@ def recomend():
 def rec_usuarios():
     return render_template('pages/rec_usuarios.html', recomendacoes = User.all_recomendacoes(User))
 
-@app.route('/dashboard')
+@app.route('/cad_favoritos')
+def favoritos():
+    if request.method == 'POST':
+       livro = request.form["livro"]
+       escritor = request.form["escritor"]
+       favorito = User(livro=livro, escritor=escritor)
+       favorito.save_favoritos()
+       flash("Livro adicionado aos favoritos")
+       return redirect(url_for('dash'))
+    return render_template('pages/cad_favoritos')
+
+@app.route('/dashboard') #Página que exibe os favoritos 
 @login_required
 def dash():
-    return render_template('pages/dash.html')
+    return render_template('pages/dash.html', favoritos = User.all_favoritos(User))
 
 # 8 - logout
 @app.route('/logout')
@@ -81,3 +92,4 @@ def dash():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
