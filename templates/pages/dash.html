@@ -1,1 +1,17 @@
+{% extends 'modelo.html' %}
 
+{% block title %} Favoritos {% endblock %}
+
+{% block conteudo %}
+
+<h2> Livros - Favoritos </h2>
+    <ul>
+        {% for favorito in favoritos %}
+        <li>
+            {{favorito['livro']}} | {{favorito['escritor']}}
+        </li>
+        {% endfor %}
+    </ul>
+<button  action="{{url_for('cad_favoritos')}}">Adicionar Livros Favoritos</button>
+
+{% endblock %}
