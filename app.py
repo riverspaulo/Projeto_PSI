@@ -79,7 +79,7 @@ def favoritos():
        favorito.save_favoritos()
        flash("Livro adicionado aos favoritos")
        return redirect(url_for('dash'))
-    return render_template('pages/cad_favoritos')
+    return render_template('pages/cad_favoritos.html')
 
 @app.route('/dashboard') #Página que exibe os favoritos 
 @login_required
