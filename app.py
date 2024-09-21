@@ -1,6 +1,6 @@
+
 from flask import Flask, redirect, render_template, url_for, request, flash
-import sqlite3
-from models import User
+from models import User, obter_conexao
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_mail import Mail, Message
 
@@ -59,10 +59,12 @@ def login():
         email = request.form['email']
         senha = request.form['senha']   
         user = User.get_by_email(email)
-        if check_password_hash(user['senha'], senha):
+
+        if user and check_password_hash(user['senha'], senha):
             login_user(User.get(user['id']))
             flash("Você está logado")
             return redirect(url_for('recomend'))
+        
         else:
             flash("Dados incorretos")
             return redirect(url_for('login'))
@@ -105,4 +107,3 @@ def dash():
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
