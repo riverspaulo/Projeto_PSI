@@ -2,12 +2,22 @@ from flask import Flask, redirect, render_template, url_for, request, flash
 import sqlite3
 from models import User
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask_mail import Mail, Message
 
 # 1 - Adicionar o LoginManager
 from flask_login import LoginManager, login_user, login_required, logout_user
 login_manager = LoginManager()
 
 app = Flask(__name__)
+# Config do flask-mail
+app.config['MAIL_SERVER']= 'sandbox.smtp.mailtrap.io'
+app.config['MAIL_PORT'] = 2525
+app.config['MAIL_USERNAME'] = '3a0ea47949473c'
+app.config['MAIL_PASSWORD'] = 'f529827f19de12'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+
+mail = Mail(app)
 
 # 2 - Configurar app para trabalhar junto com flask-login
 login_manager.init_app(app)
@@ -28,7 +38,10 @@ def index():
 def register():
     if request.method == 'POST':
         email = request.form['email']
-        senha = request.form['senha']   
+        senha = request.form['senha'] 
+        msg = Message(subject='Olá caro leitor!', sender='peter@mailtrap.club', recipients=[email])
+        msg.body = "Obrigado por acessar nosso site, cadastre-se para aproveitar!!!."
+        mail.send(msg)
         if not User.exists(email):
             user = User(email=email, senha=senha)
             user.save()            
