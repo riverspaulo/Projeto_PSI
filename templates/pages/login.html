@@ -1,0 +1,19 @@
+{% extends 'modelo.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block conteudo %}
+
+<div class="page">
+    <form method="POST" class="formLogin" method="post">
+        <h1>Login</h1>
+        <p>Digite os seus dados de acesso no campo abaixo.</p>
+        <label for="email">E-mail</label>
+        <input type="email" name="email" placeholder="Digite seu e-mail" autofocus="true" />
+        <label for="password">Senha</label>
+        <input type="password" name="senha" placeholder="Digite sua senha" />
+        <a class="btn btn-primary btn-xl rounded-pill mt-5" href="{{url_for('recomend')}}">Login</a>
+    </form>
+</div>
+
+{% endblock %}
