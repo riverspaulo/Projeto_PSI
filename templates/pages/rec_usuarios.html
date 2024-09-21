@@ -1,0 +1,16 @@
+{% extends 'modelo.html' %}
+
+{% block title %} Inicial {% endblock %}
+
+{% block conteudo %}
+
+<h2>Livros recomendados por usuários</h2>
+    <ul>
+        {% for recomendacao in recomendacoes %}
+        <li>
+            {{recomendacao['titulo']}} | {{recomendacao['autor']}}
+        </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
