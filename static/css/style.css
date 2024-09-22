@@ -11012,3 +11012,22 @@ header.masthead .bg-circle-4 {
   border-radius: 50px;
   font-family: var(--bs-body-font-family)
 }
+
+.button-favoritos {
+  color: #ffff;
+  border: none;
+  background-color: var(--ideias-100);
+  padding: 10px 28px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 50px;
+  font-family: var(--bs-body-font-family);
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+.form-favoritos{
+  display: flex;
+  justify-content: center;
+}
