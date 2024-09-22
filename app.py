@@ -4,7 +4,6 @@ from models import User, obter_conexao
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_mail import Mail, Message
 
-# 1 - Adicionar o LoginManager
 from flask_login import LoginManager, login_user, login_required, logout_user
 login_manager = LoginManager()
 
@@ -19,13 +18,10 @@ app.config['MAIL_USE_SSL'] = False
 
 mail = Mail(app)
 
-# 2 - Configurar app para trabalhar junto com flask-login
 login_manager.init_app(app)
 
-# 3 - ncessário adicionar uma chave secreta para aplicaçãos
 app.config['SECRET_KEY'] = 'ULTRAMEGADIFICIL'
 
-# 4-  Função utilizada para carregar o usuário da sessão (logado)
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
@@ -52,7 +48,6 @@ def register():
     return render_template('pages/register.html')
 
 
-# 7 - logar um usuário já existente
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
