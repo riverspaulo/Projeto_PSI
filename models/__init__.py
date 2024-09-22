@@ -31,28 +31,24 @@ class User(UserMixin):
         if 'escritor' in kwargs.keys():
             self._escritor = kwargs['escritor']
 
-    # 5 - sobresrever get id do UserMixin
+
     def get_id(self):
         return str(self._id)
 
     
-    # usada para definir senha como uma propriedade
     @property
     def _senha(self):
         return self._hash
     
-    # sempre salva o hash a partir da senha
     @_senha.setter
     def _senha(self, senha):
         self._hash = generate_password_hash(senha)
 
     
-    # ----------métodos para manipular o banco--------------#
     def save(self):        
         conn = obter_conexao()  
         cursor = conn.cursor(dictionary=True)      
         cursor.execute("INSERT INTO users(email, senha) VALUES (%s, %s)", (self._email, self._hash,))
-        # salva o id no objeto recem salvo no banco
         self._id = cursor.lastrowid
         conn.commit()
         conn.close()
@@ -116,7 +112,7 @@ class User(UserMixin):
         user = cursor.fetchall()
         conn.commit()
         conn.close()
-        if user: #melhorar esse if-else
+        if user:
             return True
         else:
             return False
